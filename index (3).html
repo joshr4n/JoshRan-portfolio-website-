@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joshua Randall — Cybersecurity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1420;
+    --surface: #171f2e;
+    --surface-2: #1e2839;
+    --line: #2c3850;
+    --text: #f4f2ec;
+    --text-muted: #98a3b8;
+    --accent: #4fd1c5;
+    --accent-2: #7c9eff;
+    --accent-soft: rgba(79, 209, 197, 0.14);
+    --warm: #f2994a;
+    --max-w: 760px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .wrap {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* --- Top bar --- */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(16, 20, 26, 0.86);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    max-width: 860px;
+  }
+  .topbar .name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+  .topbar nav {
+    display: flex;
+    gap: 22px;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+  .topbar nav a { color: var(--text-muted); }
+  .topbar nav a:hover { color: var(--accent); text-decoration: none; }
+  .topbar .menu-btn { display: none; background: none; border: none; color: var(--text); font-size: 1.4rem; cursor: pointer; }
+
+  @media (max-width: 620px) {
+    .topbar nav { display: none; }
+    .topbar .menu-btn { display: block; }
+    .topbar nav.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--line);
+      gap: 14px;
+    }
+  }
+
+  /* --- Hero --- */
+  .hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 64px 28px 40px;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .hero-text .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+  .status .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--warm);
+    box-shadow: 0 0 0 3px rgba(201, 123, 74, 0.18);
+  }
+  .hero h1 {
+    font-size: clamp(2.1rem, 5vw, 2.9rem);
+    line-height: 1.12;
+    color: var(--text);
+  }
+  .hero .role {
+    margin-top: 10px;
+    font-size: 1.05rem;
+    color: var(--accent);
+    font-family: 'Fraunces', serif;
+  }
+  .hero p.summary {
+    margin-top: 18px;
+    color: var(--text-muted);
+    max-width: 46ch;
+  }
+  .hero .contact-row {
+    margin-top: 26px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    font-size: 0.92rem;
+  }
+  .hero .contact-row a, .hero .contact-row span { color: var(--text-muted); }
+  .hero .contact-row a:hover { color: var(--accent); }
+
+  .hero-diagram { width: 100%; height: auto; }
+
+  @media (max-width: 700px) {
+    .hero { grid-template-columns: 1fr; padding-top: 44px; }
+    .hero-diagram { max-width: 220px; margin: 0 auto; opacity: 0.85; }
+  }
+
+  /* --- Sections --- */
+  section {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 46px 28px;
+    border-top: 1px solid var(--line);
+  }
+  section .kicker {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  section h2 {
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  /* Skills */
+  .skill-groups {
+    display: grid;
+    gap: 22px;
+  }
+  .skill-group h3 {
+    font-size: 0.98rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border: 1px solid var(--line);
+    padding: 5px 12px;
+    border-radius: 100px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .pill:hover {
+    border-color: var(--accent-2);
+    color: var(--text);
+  }
+
+  /* Experience timeline */
+  .job {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 18px;
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+  }
+  .job:first-of-type { border-top: none; padding-top: 0; }
+  .job .when {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    padding-top: 2px;
+  }
+  .job h3 {
+    font-size: 1.08rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .job .org { color: var(--accent); font-size: 0.95rem; margin-top: 2px; }
+  .job ul { margin: 12px 0 0; padding-left: 18px; color: var(--text-muted); font-size: 0.95rem; }
+  .job li { margin-bottom: 6px; }
+
+  @media (max-width: 560px) {
+    .job { grid-template-columns: 1fr; gap: 4px; }
+  }
+
+  /* Education */
+  .edu-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px;
+  }
+  .edu-card h3 { font-size: 1.1rem; color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; }
+  .edu-card .org { color: var(--accent); margin-top: 4px; }
+  .edu-meta {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+  .edu-meta strong { color: var(--text); font-weight: 500; }
+  .coursework {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .coursework strong { color: var(--text); font-weight: 500; }
+
+  /* Certification callout */
+  .cert-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(95, 168, 160, 0.35);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  .cert-card .badge {
+    flex-shrink: 0;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cert-card .badge svg { width: 18px; height: 18px; }
+  .cert-card h3 { font-size: 1.02rem; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; color: var(--text); }
+  .cert-card .tag {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 0.78rem;
+    color: var(--accent);
+    border: 1px solid rgba(95,168,160,0.5);
+    padding: 2px 9px;
+    border-radius: 100px;
+  }
+  .cert-card p { margin: 10px 0 0; color: var(--text-muted); font-size: 0.93rem; }
+
+  /* Leadership */
+  .lead-item { padding: 18px 0; border-top: 1px solid var(--line); }
+  .lead-item:first-of-type { border-top: none; padding-top: 0; }
+  .lead-item h3 { font-size: 1.02rem; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; color: var(--text); }
+  .lead-item .org { color: var(--accent); font-size: 0.92rem; margin-top: 2px; }
+  .lead-item p { color: var(--text-muted); font-size: 0.94rem; margin-top: 8px; }
+
+  /* Footer / contact */
+  footer {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 50px 28px 70px;
+    border-top: 1px solid var(--line);
+  }
+  footer h2 { font-size: 1.4rem; margin-bottom: 14px; }
+  footer p { color: var(--text-muted); max-width: 44ch; }
+  .footer-links {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .footer-links a {
+    color: var(--text);
+    border: 1px solid var(--line);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+  }
+  .footer-links a:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+  footer .fine {
+    margin-top: 44px;
+    font-size: 0.8rem;
+    color: #5a6270;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  .draw-in path, .draw-in circle {
+    animation: draw 1.4s ease forwards;
+  }
+  @keyframes draw {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* --- Bubble nav --- */
+  .explore {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 8px 28px 44px;
+  }
+  .explore-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .bubble-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 14px;
+  }
+  .bubble {
+    --b: var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px 12px 16px;
+    cursor: pointer;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+  }
+  .bubble:hover {
+    transform: translateY(-4px);
+    border-color: var(--b);
+    color: var(--text);
+    box-shadow: 0 10px 24px -12px var(--b);
+  }
+  .bubble.active {
+    border-color: var(--b);
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  .bubble-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1.5px solid var(--b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bubble-icon svg { width: 19px; height: 19px; stroke: var(--b); }
+
+  /* --- Collapsible section panels --- */
+  .section-toggle {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    cursor: pointer;
+    gap: 12px;
+  }
+  .section-toggle .chevron {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .section-toggle .chevron svg { width: 11px; height: 11px; stroke: var(--text-muted); }
+  .section-toggle[aria-expanded="true"] .chevron {
+    transform: rotate(45deg);
+    border-color: var(--accent-2);
+  }
+  .section-toggle[aria-expanded="true"] .chevron svg { stroke: var(--accent-2); }
+  .section-toggle-head { text-align: left; }
+
+  .panel {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.45s ease, opacity 0.35s ease, margin-top 0.45s ease;
+  }
+  .panel.open {
+    opacity: 1;
+    margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="name">Joshua Randall</div>
+    <nav id="mainNav">
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#leadership">Leadership</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-text">
+    <div class="status"><span class="dot"></span> Open to cybersecurity &amp; IT support roles</div>
+    <h1>Joshua Randall</h1>
+    <div class="role">Cybersecurity Graduate — Las Cruces, NM</div>
+    <p class="summary">Cybersecurity graduate (3.78 GPA, Honors) from New Mexico State University with hands-on experience in technical support, troubleshooting, and operations. Grounded in networking, security, digital forensics, and information systems — and used to working under pressure, solving problems, and explaining technical issues to people who aren't technical.</p>
+    <div class="contact-row">
+      <a href="mailto:jdrandall26@gmail.com">jdrandall26@gmail.com</a>
+      <span>Las Cruces, NM 88011</span>
+    </div>
+  </div>
+  <svg class="hero-diagram draw-in" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="nodeGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#4fd1c5"/>
+        <stop offset="100%" stop-color="#7c9eff"/>
+      </linearGradient>
+    </defs>
+    <circle cx="120" cy="40" r="6" fill="url(#nodeGrad)"/>
+    <circle cx="50" cy="120" r="6" fill="url(#nodeGrad)"/>
+    <circle cx="190" cy="110" r="6" fill="url(#nodeGrad)"/>
+    <circle cx="90" cy="200" r="6" fill="url(#nodeGrad)"/>
+    <circle cx="180" cy="195" r="6" fill="#f2994a"/>
+    <circle cx="120" cy="130" r="4" fill="#f4f2ec"/>
+    <path d="M120 40 L120 130" stroke="#2c3850" stroke-width="1.5"/>
+    <path d="M50 120 L120 130" stroke="#2c3850" stroke-width="1.5"/>
+    <path d="M190 110 L120 130" stroke="#2c3850" stroke-width="1.5"/>
+    <path d="M90 200 L120 130" stroke="#2c3850" stroke-width="1.5"/>
+    <path d="M180 195 L120 130" stroke="#2c3850" stroke-width="1.5"/>
+    <circle cx="120" cy="130" r="34" stroke="#4fd1c5" stroke-width="1" opacity="0.4"/>
+    <circle cx="120" cy="130" r="58" stroke="#7c9eff" stroke-width="1" opacity="0.2"/>
+  </svg>
+</div>
+
+<div class="explore">
+  <div class="explore-label">Tap a node to explore</div>
+  <div class="bubble-grid">
+    <button class="bubble" data-target="skills" style="--b:#4fd1c5">
+      <span class="bubble-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>
+      <span>Skills</span>
+    </button>
+    <button class="bubble" data-target="experience" style="--b:#7c9eff">
+      <span class="bubble-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></span>
+      <span>Experience</span>
+    </button>
+    <button class="bubble" data-target="education" style="--b:#f2994a">
+      <span class="bubble-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M2 9l10-5 10 5-10 5-10-5z"/><path d="M6 11v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"/></svg></span>
+      <span>Education</span>
+    </button>
+    <button class="bubble" data-target="certifications" style="--b:#4fd1c5">
+      <span class="bubble-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>
+      <span>Certifications</span>
+    </button>
+    <button class="bubble" data-target="leadership" style="--b:#7c9eff">
+      <span class="bubble-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.8L5.8 21l1.6-7-5.4-4.7 7.1-.6L12 2z"/></svg></span>
+      <span>Leadership</span>
+    </button>
+    <button class="bubble" data-target="contact" style="--b:#f2994a">
+      <span class="bubble-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+      <span>Contact</span>
+    </button>
+  </div>
+</div>
+
+<section id="skills">
+  <button class="section-toggle" data-panel="skills-panel" aria-expanded="false">
+    <span class="section-toggle-head">
+      <div class="kicker">Capabilities</div>
+      <h2>Skills</h2>
+    </span>
+    <span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+  </button>
+  <div class="panel" id="skills-panel">
+  <div class="skill-groups">
+    <div class="skill-group">
+      <h3>Security &amp; networking</h3>
+      <div class="pill-row">
+        <span class="pill">Network Security</span>
+        <span class="pill">Vulnerability Testing</span>
+        <span class="pill">Digital Forensics</span>
+        <span class="pill">Incident Response</span>
+        <span class="pill">Data Security</span>
+        <span class="pill">Information Systems</span>
+        <span class="pill">Computer Networking</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Technical support</h3>
+      <div class="pill-row">
+        <span class="pill">Troubleshooting &amp; Diagnostics</span>
+        <span class="pill">Computer Hardware &amp; Software</span>
+        <span class="pill">Data Recovery &amp; Transfer</span>
+        <span class="pill">Home Network Setup</span>
+        <span class="pill">Data Management &amp; Documentation</span>
+        <span class="pill">Microsoft Office Suite</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Operations &amp; leadership</h3>
+      <div class="pill-row">
+        <span class="pill">Team Leadership</span>
+        <span class="pill">Conflict Resolution</span>
+        <span class="pill">Safety &amp; Risk Awareness</span>
+        <span class="pill">Equipment &amp; Asset Management</span>
+        <span class="pill">Inventory Management</span>
+        <span class="pill">Independent Work &amp; Accountability</span>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section id="experience">
+  <button class="section-toggle" data-panel="experience-panel" aria-expanded="false">
+    <span class="section-toggle-head">
+      <div class="kicker">Track record</div>
+      <h2>Experience</h2>
+    </span>
+    <span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+  </button>
+  <div class="panel" id="experience-panel">
+
+  <div class="job">
+    <div class="when">Nov 2025 – Present</div>
+    <div>
+      <h3>Sales Associate</h3>
+      <div class="org">Best Buy</div>
+      <ul>
+        <li>Recognized as a top-performing tech sales associate in Las Cruces across multiple quarters this past year</li>
+        <li>Provide Geek Squad services including data transfer and recovery, PC setup, and home network installation</li>
+        <li>Diagnose and troubleshoot customer technology issues across computers, networking equipment, mobile devices, and consumer electronics</li>
+        <li>Translate technical concepts into plain language for customers with varying levels of technical knowledge</li>
+        <li>Maintain accurate product and transaction records using internal inventory and point-of-sale systems</li>
+        <li>Resolve customer concerns through patience, sound judgment, and problem-solving under time pressure</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="job">
+    <div class="when">May 2022 – Jun 2025</div>
+    <div>
+      <h3>Sales Associate</h3>
+      <div class="org">Sherwin-Williams</div>
+      <ul>
+        <li>Identified customer needs and recommended appropriate products and solutions</li>
+        <li>Safely handled, stored, and transported materials, including hazardous materials, per established procedures</li>
+        <li>Maintained accurate inventory and sales records across retail and warehouse environments</li>
+        <li>Balanced multiple responsibilities in a fast-paced environment while sustaining safety and productivity</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="job">
+    <div class="when">Aug 2021 – May 2022</div>
+    <div>
+      <h3>Grounds Keeper</h3>
+      <div class="org">New Mexico State University</div>
+      <ul>
+        <li>Maintained safe, professional public spaces as part of a coordinated campus team</li>
+        <li>Operated tools and equipment safely, following established procedures</li>
+        <li>Prioritized daily assignments and completed responsibilities independently</li>
+      </ul>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section id="education">
+  <button class="section-toggle" data-panel="education-panel" aria-expanded="false">
+    <span class="section-toggle-head">
+      <div class="kicker">Foundation</div>
+      <h2>Education</h2>
+    </span>
+    <span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+  </button>
+  <div class="panel" id="education-panel">
+  <div class="edu-card">
+    <h3>Bachelor of Engineering — Communication, Information, and Technology (CIT)</h3>
+    <div class="org">New Mexico State University, Las Cruces, NM · Concentration in Cybersecurity</div>
+    <div class="edu-meta">
+      <span><strong>3.78</strong> GPA</span>
+      <span>Graduated with <strong>Honors</strong></span>
+      <span>College of Engineering <strong>Crimson Scholar</strong></span>
+    </div>
+    <div class="coursework">
+      <strong>Relevant coursework:</strong> Computer Networking, Network Security, Vulnerability Testing, Digital Forensics, Incident Response, Data Security, Information Systems
+    </div>
+  </div>
+  </div>
+</section>
+
+<section id="certifications">
+  <button class="section-toggle" data-panel="certifications-panel" aria-expanded="false">
+    <span class="section-toggle-head">
+      <div class="kicker">In progress</div>
+      <h2>Certifications</h2>
+    </span>
+    <span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+  </button>
+  <div class="panel" id="certifications-panel">
+  <div class="cert-card">
+    <div class="badge">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" stroke="#4fd1c5" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div>
+      <h3>CompTIA Security+</h3>
+      <span class="tag">In progress</span>
+      <p>Currently working through multiple certifications with Security+ as the primary focus, building on coursework in network security, vulnerability testing, and incident response.</p>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section id="leadership">
+  <button class="section-toggle" data-panel="leadership-panel" aria-expanded="false">
+    <span class="section-toggle-head">
+      <div class="kicker">Beyond the resume</div>
+      <h2>Leadership</h2>
+    </span>
+    <span class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+  </button>
+  <div class="panel" id="leadership-panel">
+  <div class="lead-item">
+    <h3>Risk Manager</h3>
+    <div class="org">Sigma Chi Fraternity · Junior–Senior year</div>
+    <p>Promoted safe practices and managed organizational risk, communicating expectations and safety procedures to members and exercising judgment in sensitive situations.</p>
+  </div>
+
+  <div class="lead-item">
+    <h3>Transportation Logistics Lead</h3>
+    <div class="org">Aggies Without Limits — New Mexico State University</div>
+    <p>Led transportation logistics for a charitable service project in Guatemala, coordinating the movement of students, equipment, and supplies in an unfamiliar, changing environment.</p>
+  </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="kicker">Get in touch</div>
+  <h2>Let's talk</h2>
+  <p>Looking for entry-level cybersecurity or IT support roles in or around Las Cruces, or remote. Happy to walk through my coursework, background, or certification progress.</p>
+  <div class="footer-links">
+    <a href="mailto:jdrandall26@gmail.com">Email me</a>
+  </div>
+  <div class="fine">Joshua Randall · Las Cruces, NM</div>
+</footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const nav = document.getElementById('mainNav');
+  menuBtn.addEventListener('click', () => {
+    const isOpen = nav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', isOpen);
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }));
+
+  function openPanel(panelId, toggleBtn) {
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+    panel.classList.add('open');
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+    if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
+    const bubble = document.querySelector('.bubble[data-target="' + panelId.replace('-panel', '') + '"]');
+    if (bubble) bubble.classList.add('active');
+  }
+
+  function closePanel(panelId, toggleBtn) {
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+    panel.style.maxHeight = null;
+    panel.classList.remove('open');
+    if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+    const bubble = document.querySelector('.bubble[data-target="' + panelId.replace('-panel', '') + '"]');
+    if (bubble) bubble.classList.remove('active');
+  }
+
+  // Section header click = toggle its own panel
+  document.querySelectorAll('.section-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const panelId = btn.dataset.panel;
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      if (isOpen) {
+        closePanel(panelId, btn);
+      } else {
+        openPanel(panelId, btn);
+      }
+    });
+  });
+
+  // Bubble click = scroll to section + open its panel
+  document.querySelectorAll('.bubble').forEach(bubble => {
+    bubble.addEventListener('click', () => {
+      const targetId = bubble.dataset.target;
+      const section = document.getElementById(targetId);
+      if (targetId === 'contact') {
+        document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      const toggleBtn = section ? section.querySelector('.section-toggle') : null;
+      const panelId = targetId + '-panel';
+      openPanel(panelId, toggleBtn);
+      if (section) {
+        setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+      }
+    });
+  });
+
+  // Top nav links = same behavior as bubbles
+  document.querySelectorAll('#mainNav a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const targetId = link.getAttribute('href').replace('#', '');
+      if (targetId === 'contact') return;
+      e.preventDefault();
+      const section = document.getElementById(targetId);
+      const toggleBtn = section ? section.querySelector('.section-toggle') : null;
+      const panelId = targetId + '-panel';
+      openPanel(panelId, toggleBtn);
+      if (section) {
+        setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+      }
+    });
+  });
+
+  // Recalculate open panel heights on resize (so wrapped text doesn't clip)
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.panel.open').forEach(p => {
+      p.style.maxHeight = p.scrollHeight + 'px';
+    });
+  });
+</script>
+
+</body>
+</html>
